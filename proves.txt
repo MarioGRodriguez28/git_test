@@ -1,3 +1,5 @@
 HELLO GIT
 
 BRANCH1
+
+Torna a la branca original “master” i modifica també el fitxer, fes commit i push.
