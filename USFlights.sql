@@ -6,21 +6,23 @@ SELECT origin,
  from usflights.flights
  group by origin;
  
- SELECT origin, year, Month ,avg (ArrDelay), 
+SELECT origin, year, Month ,avg (ArrDelay), 
 CASE
 WHEN avg (ArrDelay) >1 then "RETARD" 
 WHEN avg (ArrDelay) <1 then "ON TIME" 
 end
 AS Estado
-FROM usflights.flights group by origin, month;
-
+FROM usflights.flights group by year, month;
+ 
 SELECT usflights.airports.city, usflights.flights.year, usflights.flights.Month ,avg (ArrDelay), 
 CASE
 WHEN avg (ArrDelay) >1 then "RETARD" 
 WHEN avg (ArrDelay) <1 then "ON TIME" 
 end
 AS Estado
-FROM usflights.flights, usflights.airports where usflights.airports.iata = usflights.flights.origin
+FROM usflights.flights 
+Left join  usflights.airports
+ON origin=iata
  group by usflights.flights.origin, usflights.flights.month;
 
 select count(usflights.flights.Cancelled) AS  Cancelled,  usflights.carriers.Description
@@ -31,10 +33,12 @@ AND Cancelled>0
 group by usflights.carriers.Description 
 order by Cancelled desc;
 
-SELECT  FlightNum, Distance 
-FROM usflights.flights 
-order by   Distance 
-desc limit 10;
+SELECT sum(Distance), TailNum 
+FROM usflights.flights
+wHERE TailNUm!='NA'
+Group by Tailnum
+order by   sum(distance) desc
+limit 10;
 
 select  usflights.carriers.Description AS  Compañia, avg (ArrDelay) AS Promedio
 FROM flights , carriers 
